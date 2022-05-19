@@ -1,0 +1,560 @@
+from tkinter import *
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+import Estilos
+from tkinter.messagebox import showinfo
+from tkcalendar import DateEntry
+
+
+lista1 = ['123', '123']
+lista2 = ['12','12']
+
+## Inicio de Sesion de usuario administrativo
+def usuarios_admin():
+    global  sv_usuario_admin
+    global sv_contraseña_admin
+    if sv_usuarios.get() == 'Administrador':
+        ventana_usuarios_admin = Toplevel(ventana_inicial)
+        ventana_usuarios_admin.minsize(500,250)
+        ventana_usuarios_admin.title('Sistema de Administración del Tiempo')
+        ventana_usuarios_admin.resizable(False,False)
+        ventana_usuarios_admin.configure(background=Estilos.BACKGROUND1)
+
+        lb_principal = tk.Label(ventana_usuarios_admin, text = '''-----------------------------------------------------------------
+        Inicio de Sesión Administrativo
+        -----------------------------------------------------------------''', **Estilos.STYLE).pack(side=TOP)
+
+        lb_usuario = tk.Label(ventana_usuarios_admin, text = "Nombre de usuario:", **Estilos.LABELS).place(x = 20,y = 100)  
+            
+        lb_contraseña = tk.Label(ventana_usuarios_admin, text = "Contraseña:", **Estilos.LABELS).place(x = 20, y = 135)  
+        sv_usuario_admin = tk.StringVar()        
+        ent_usuario = tk.Entry(ventana_usuarios_admin, width = 30, textvariable=sv_usuario_admin).place(x = 200,y = 105)  
+        sv_contraseña_admin = tk.StringVar()        
+        ent_contraseña = tk.Entry(ventana_usuarios_admin, show='*', width = 30, textvariable=sv_contraseña_admin).place(x = 200, y = 140)  
+            
+        boton_ingresar = tk.Button(ventana_usuarios_admin, 
+                                    text = "Ingresar",
+                                    command=lambda:[administrador(),esconder(ventana_usuarios_admin)], 
+                                    **Estilos.BOTONES
+                                    ).place(x = 425, y = 210)
+    else:
+        usuarios_estudiantes()
+
+## Menu principal Administrativo
+def administrador():
+    global sv_opciones
+    if sv_usuario_admin.get() in lista1:
+        if sv_contraseña_admin.get() in lista1:
+            ventana_admin = Toplevel(ventana_inicial)
+            ventana_admin.title('Sistema de Administración del Tiempo')
+            ventana_admin.minsize(700,300)
+            ventana_admin.resizable(False, False)
+            ventana_admin.configure(background=Estilos.BACKGROUND1)
+
+            titulo = tk.Label(ventana_admin, text = '''-----------------------------------------------------------------
+            Sistema Administrativo
+            -----------------------------------------------------------------''', **Estilos.STYLE
+            ).pack(side=TOP)
+
+            instruccion1 = tk.Label(ventana_admin, text = "Seleccione la opción que desea realizar:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+            sv_opciones = tk.StringVar()
+            combo_opciones = ttk.Combobox(ventana_admin, textvariable=sv_opciones)
+            combo_opciones['values'] = ["Agregar/Modificar un curso","Agregar/Modificar una carrera", "Agregar un nuevo usuario"]
+            combo_opciones['state'] = 'readonly'
+            combo_opciones.place(x = 370, y = 140, width= 200, height=23)
+
+            boton_regresar = tk.Button(ventana_admin, text = "Regresar a la pantalla inicial", command=lambda:[mostrar(ventana_inicial), esconder(ventana_admin)], **Estilos.BOTONES).place(x =20, y = 260)
+            boton_ingresar = tk.Button(ventana_admin, text = "Seleccionar", command=lambda:[admin_cursos(), esconder(ventana_admin)],**Estilos.BOTONES).place(x =575, y = 138)
+        else:
+            messagebox.showinfo(message='¡¡¡SU USUARIO O CONTRASEÑA SON INCORRECTOS!!!', title='Alerta')
+    else:
+        messagebox.showinfo(message='¡¡¡SU USUARIO O CONTRASEÑA SON INCORRECTOS!!!', title='Alerta')
+
+## Agregar/Modificar un curso
+def admin_cursos():
+    if sv_opciones.get() == "Agregar/Modificar un curso":
+        ventana_admin_cursos= Toplevel(ventana_inicial)
+        ventana_admin_cursos.title('Sistema de Administración del Tiempo')
+        ventana_admin_cursos.minsize(700,575)
+        ventana_admin_cursos.resizable(False, False)
+        ventana_admin_cursos.configure(background=Estilos.BACKGROUND1)
+
+        titulo = tk.Label(ventana_admin_cursos, text = '''-----------------------------------------------------------------
+        Adición o Modificación de Cursos
+        -----------------------------------------------------------------''', **Estilos.STYLE
+        ).pack(side=TOP)
+
+        opcion_curso = tk.Label(ventana_admin_cursos, text= 'Seleccione el curso a modificar:', **Estilos.LABELS).place(x = 20, y = 120)   
+
+        opciones = tk.StringVar()
+        opciones1 = ttk.Combobox(ventana_admin_cursos, textvariable=opciones)
+        opciones1['values'] = ["Matematica", 'Ingles']
+        opciones1['state'] = 'readonly'
+        opciones1.place(x = 300, y = 125, width= 200, height=23)
+
+        nombre = tk.Label(ventana_admin_cursos, text= 'Nombre del curso:', **Estilos.LABELS).place(x = 20, y = 160)   
+        creditos = tk.Label(ventana_admin_cursos, text= 'Número de créditos:', **Estilos.LABELS).place(x = 20, y = 200)   
+        horas = tk.Label(ventana_admin_cursos, text= 'Número de horas lectivas diarias:', **Estilos.LABELS).place(x = 20, y = 240)   
+        fecha_inicio = tk.Label(ventana_admin_cursos, text= 'Fecha de inicio del curso:', **Estilos.LABELS).place(x = 20, y = 280)   
+        fecha_final = tk.Label(ventana_admin_cursos, text= 'Fecha de finalización del curso:', **Estilos.LABELS).place(x = 20, y = 320)   
+        dia = tk.Label(ventana_admin_cursos, text= 'Día de la clase:', **Estilos.LABELS).place(x = 20, y = 360)   
+        hora_inicio = tk.Label(ventana_admin_cursos, text= 'Hora de inicio de la clase:', **Estilos.LABELS).place(x = 20, y = 400)   
+        hora_final = tk.Label(ventana_admin_cursos, text= 'Hora de finalización de la clase:', **Estilos.LABELS).place(x = 20, y = 440)   
+
+        nombre1 = tk.Entry(ventana_admin_cursos, width = 30).place(x = 185, y = 165)
+        creditos1 = tk.Entry(ventana_admin_cursos, width = 30).place(x = 200, y = 205)
+        horas1 = tk.Entry(ventana_admin_cursos, width = 30).place(x = 305, y = 245)
+        fecha_inicio1 = DateEntry(ventana_admin_cursos, selectmode='day').place(x = 245, y = 285)
+        fecha_final1 = DateEntry(ventana_admin_cursos, selectmode='day').place(x = 295, y = 325)
+        hora_inicio1 = tk.Entry(ventana_admin_cursos, width = 30).place(x = 245, y = 405)
+        hora_final1 = tk.Entry(ventana_admin_cursos, width = 30).place(x = 295, y = 445)
+
+        dia1 = tk.StringVar()
+        dia1_1 = ttk.Combobox(ventana_admin_cursos, textvariable=dia1)
+        dia1_1['values'] = ['Lunes', 'Martes', 'Miércoles','Jueves', 'Viernes', 'Sábado', 'Domingo']
+        dia1_1['state'] = 'readonly'
+        dia1_1.place(x = 160, y = 365, width= 200, height=23)
+
+        boton_regresar = tk.Button(ventana_admin_cursos, text = "Regresar a la pantalla inicial", command=lambda:[administrador(), esconder(ventana_admin_cursos)],**Estilos.BOTONES).place(x =20, y = 530)
+        boton_añadir = tk.Button(ventana_admin_cursos, text='Añadir curso', **Estilos.BOTONES).place(x = 605, y = 530)
+        boton_modificar = tk.Button(ventana_admin_cursos, text='Modificar', **Estilos.BOTONES).place(x = 530, y = 530)
+        boton_eliminar = tk.Button(ventana_admin_cursos, text='Eliminar curso', **Estilos.BOTONES_ALARMA).place(x = 505, y = 122)
+
+        '''messagebox.showinfo(message='¡Curso agregado con éxito!', title='Alerta')
+        messagebox.showinfo(message='¡Los datos fueron modificados con éxito!', title='Alerta')
+        messagebox.askokcancel(message="¿Realmente desea eliminar el curso?", title="Alerta")
+        messagebox.askyesno(message="¿Está seguro que desea regresar a la pantalla anterior? \n\nTodo los datos digitados se perderán.", title="Alerta")
+        messagebox.showinfo(message='Ya existe un curso con este nombre. Ingrese un nuevo nombre.', title='Alerta')
+        messagebox.showinfo(message='Por favor, seleccione primero un curso para modificar.', title='Alerta')
+        messagebox.showinfo(message='¡¡¡Ingrese un nombre válido!!!', title='Alerta')''' 
+    elif sv_opciones.get() == "Agregar/Modificar una carrera":
+        admin_carreras()
+    elif sv_opciones.get() == "Agregar un nuevo usuario":
+        admin_usuarios()
+
+## Agregar/Modificar una carrera
+def admin_carreras():
+    ventana_admin_carreras = Toplevel(ventana_inicial)
+    ventana_admin_carreras.title('Sistema de Administración del Tiempo')
+    ventana_admin_carreras.minsize(650,500)
+    ventana_admin_carreras.resizable(False, False)
+    ventana_admin_carreras.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_admin_carreras, text = '''-----------------------------------------------------------------
+    Adición o Modificación de Carreras
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    opcion_carrera = tk.Label(ventana_admin_carreras, text= 'Seleccione la carrera a modificar:', **Estilos.LABELS).place(x = 20, y = 120)  
+
+    opciones = tk.StringVar()
+    opciones1 = ttk.Combobox(ventana_admin_carreras, textvariable=opciones)
+    opciones1['values'] = ["Ingenieria en Produccion Industrial", 'Ingenieria en Computacion']
+    opciones1['state'] = 'readonly'
+    opciones1.place(x = 310, y = 125, width= 210, height=23)
+
+    nombre = tk.Label(ventana_admin_carreras, text= 'Nombre de carrera:', **Estilos.LABELS).place(x = 20, y = 160)   
+    vincular = tk.Label(ventana_admin_carreras, text= 'Vincular cursos a carrera:', **Estilos.LABELS).place(x = 20, y = 200)   
+
+    nombre1 = tk.Entry(ventana_admin_carreras, width = 30).place(x = 190, y = 165)
+    vincular1 = tk.Checkbutton(ventana_admin_carreras, text= 'Hola', width = 30).place(x = 240, y = 205)
+
+    boton_eliminar = tk.Button(ventana_admin_carreras, text='Eliminar carrera', **Estilos.BOTONES_ALARMA).place(x = 525, y = 122)
+    boton_regresar = tk.Button(ventana_admin_carreras, text = "Regresar a la pantalla inicial", command=lambda:[administrador(), esconder(ventana_admin_carreras)], **Estilos.BOTONES).place(x =20, y = 455)
+    boton_añadir = tk.Button(ventana_admin_carreras, text='Añadir curso', **Estilos.BOTONES).place(x = 550, y = 455)
+    boton_modificar = tk.Button(ventana_admin_carreras, text='Modificar', **Estilos.BOTONES).place(x = 475, y = 455)
+
+    '''messagebox.showinfo(message='¡Carrera agregada con éxito!', title='Alerta')
+    messagebox.showinfo(message='¡Los datos fueron modificados con éxito!', title='Alerta')
+    messagebox.askokcancel(message="¿Realmente desea eliminar la carrera?", title="Alerta")
+    messagebox.askyesno(message="¿Está seguro que desea regresar a la pantalla anterior? \n\nTodo los datos digitados se perderán.", title="Título")
+    messagebox.showinfo(message='Ya existe una carrera con este nombre. Ingrese un nuevo nombre.', title='Alerta')
+    messagebox.showinfo(message='Por favor, seleccione primero una carrera para modificar.', title='Alerta')
+    messagebox.showinfo(message='¡¡¡Ingrese un nombre válido!!!', title='Alerta')'''
+
+## Agregar un usuario
+def admin_usuarios():
+    ventana_admin_usuarios = Toplevel(ventana_inicial)
+    ventana_admin_usuarios.title('Sistema de Administración del Tiempo')
+    ventana_admin_usuarios.minsize(650,500)
+    ventana_admin_usuarios.resizable(False, False)
+    ventana_admin_usuarios.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_admin_usuarios, text = '''-----------------------------------------------------------------
+    Adición de Usuarios
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    opcion_usuarios = tk.Label(ventana_admin_usuarios, text= 'Seleccione el tipo de usuario:', **Estilos.LABELS).place(x = 20, y = 120)  
+
+    opciones = tk.StringVar()
+    opciones1 = ttk.Combobox(ventana_admin_usuarios, textvariable=opciones)
+    opciones1['values'] = ["Administrativo", 'Estudiante']
+    opciones1['state'] = 'readonly'
+    opciones1.place(x = 280, y = 125, width= 210, height=23)
+
+    nombre = tk.Label(ventana_admin_usuarios, text = 'Nombre:', **Estilos.LABELS).place(x = 20, y = 160)
+    apellido1 = tk.Label(ventana_admin_usuarios, text = 'Primer apellido:', **Estilos.LABELS).place(x = 20, y = 200)
+    apellido2 = tk.Label(ventana_admin_usuarios, text = 'Segundo apellido:', **Estilos.LABELS).place(x = 20, y = 240)
+    numero = tk.Label(ventana_admin_usuarios, text = 'Número telefónico:', **Estilos.LABELS).place(x = 20, y = 280)
+    usuario = tk.Label(ventana_admin_usuarios, text = 'Nombre de usuario:', **Estilos.LABELS).place(x = 20, y = 320)
+    contra = tk.Label(ventana_admin_usuarios, text = 'Contraseña:', **Estilos.LABELS).place(x = 20, y = 360)
+
+    nombre1 = tk.Entry(ventana_admin_usuarios, width = 30).place(x = 100, y = 165)
+    apellido1_1 = tk.Entry(ventana_admin_usuarios, width = 30).place(x = 160, y = 205)
+    apellido2_1 = tk.Entry(ventana_admin_usuarios, width = 30).place(x = 180, y = 245)
+    numero1 = tk.Entry(ventana_admin_usuarios, width = 30).place(x = 190, y = 285)
+    usuario1 = tk.Entry(ventana_admin_usuarios, width = 30).place(x = 195, y = 325)
+    contra1 = tk.Entry(ventana_admin_usuarios, show='*', width = 30).place(x = 130, y = 365)
+
+    boton_regresar = tk.Button(ventana_admin_usuarios, text = "Regresar a la pantalla inicial", command=lambda:[administrador(), esconder(ventana_admin_usuarios)],**Estilos.BOTONES).place(x =20, y = 455)
+    boton_añadir = tk.Button(ventana_admin_usuarios, text='Añadir usuario', **Estilos.BOTONES).place(x = 535, y = 455)
+
+    '''messagebox.showinfo(message='¡Usuario agregado con éxito!', title='Alerta')
+    messagebox.askyesno(message="¿Está seguro que desea regresar a la pantalla anterior? \n\nTodo los datos digitados se perderán.", title="Título")
+    messagebox.showinfo(message='Ya existe un usuario con este nombre. Ingrese un nuevo nombre.', title='Alerta')
+    messagebox.showinfo(message='Por favor, seleccione primero el tipo de usuario a agregar.', title='Alerta')'''
+
+## Inicio de Sesion de Usuario Estudiante
+def usuarios_estudiantes():
+    global sv_contraseña_estudiante
+    global sv_usuario_estudiante
+    if sv_usuarios.get() == 'Estudiante':
+        ventana_usuarios_admin = Toplevel(ventana_inicial)
+        ventana_usuarios_admin.minsize(500,250)
+        ventana_usuarios_admin.title('Sistema de Administración del Tiempo')
+        ventana_usuarios_admin.resizable(False,False)
+        ventana_usuarios_admin.configure(background=Estilos.BACKGROUND1)
+
+        lb_principal = tk.Label(ventana_usuarios_admin, text = '''-----------------------------------------------------------------
+        Inicio de Sesión Estudiante
+        -----------------------------------------------------------------''', **Estilos.STYLE).pack(side=TOP)
+
+        lb_usuario = tk.Label(ventana_usuarios_admin, text = "Nombre de usuario:", **Estilos.LABELS).place(x = 20,y = 100)  
+            
+        lb_contraseña = tk.Label(ventana_usuarios_admin, text = "Contraseña:", **Estilos.LABELS).place(x = 20, y = 135)  
+        sv_usuario_estudiante = tk.StringVar()        
+        ent_usuario = tk.Entry(ventana_usuarios_admin, width = 30, textvariable=sv_usuario_estudiante).place(x = 200,y = 105)  
+        sv_contraseña_estudiante = tk.StringVar()        
+        ent_contraseña = tk.Entry(ventana_usuarios_admin, show='*', width = 30, textvariable=sv_contraseña_estudiante).place(x = 200, y = 140)  
+            
+        boton_ingresar = tk.Button(ventana_usuarios_admin, 
+                                    text = "Ingresar",
+                                    command=lambda:[estudiante(),esconder(ventana_usuarios_admin)], 
+                                    **Estilos.BOTONES
+                                    ).place(x = 425, y = 210)
+
+        '''messagebox.showinfo(message='¡¡¡SU USUARIO O CONTRASEÑA SON INCORRECTOS!!!', title='Alerta')
+        '''
+    else:
+        usuarios_admin()
+
+## Menu principal Estudiante
+def estudiante():
+    global sv_opciones_estudiantes
+    if sv_usuario_estudiante.get() in lista2:
+        if sv_contraseña_estudiante.get() in lista2:
+            ventana_usuario = Toplevel(ventana_inicial)
+            ventana_usuario.title('Sistema de Administración del Tiempo')
+            ventana_usuario.minsize(700,300)
+            ventana_usuario.resizable(False, False)
+            ventana_usuario.configure(background=Estilos.BACKGROUND1)
+
+            titulo = tk.Label(ventana_usuario, text = '''----------------------------------------------------------
+                Sistema Estudiante
+            -----------------------------------------------------------''', **Estilos.STYLE
+            ).pack(side=TOP)
+
+            instruccion1 = tk.Label(ventana_usuario, text = "Seleccione la opción que desea realizar:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+            sv_opciones_estudiantes = tk.StringVar()
+            opciones1 = ttk.Combobox(ventana_usuario, textvariable=sv_opciones_estudiantes)
+            opciones1['values'] = ["Matricular una carrera",
+                                    "Darse de baja de una carrera", 
+                                    "Matricular cursos", 
+                                    'Desvincular cursos', 
+                                    'Agregar actividades',
+                                    'Ver actividades',
+                                    'Generar reporte']
+            opciones1['state'] = 'readonly'
+            opciones1.place(x = 370, y = 140, width= 200, height=23)
+
+            boton_regresar = tk.Button(ventana_usuario, text = "Regresar a la pantalla inicial", command=lambda:[mostrar(ventana_inicial),esconder(ventana_usuario)],**Estilos.BOTONES).place(x =20, y = 260)
+            boton_ingresar = tk.Button(ventana_usuario, text = "Seleccionar", command=lambda:[estudiante_carreras(), esconder(ventana_usuario)],**Estilos.BOTONES).place(x =575, y = 138)
+        else:
+            messagebox.askyesno(message= '¿Realmente desea de darse de baja de la carrera?', title = 'Alerta')
+    else:
+        messagebox.showinfo(message='¡¡¡SU USUARIO O CONTRASEÑA SON INCORRECTOS!!!', title='Alerta')
+
+## Matricular carrera 
+def estudiante_carreras():
+    if sv_opciones_estudiantes.get() == "Matricular una carrera":
+        ventana_usuario_carrera = Toplevel(ventana_inicial)
+        ventana_usuario_carrera.title('Sistema de Administración del Tiempo')
+        ventana_usuario_carrera.minsize(700,300)
+        ventana_usuario_carrera.resizable(False, False)
+        ventana_usuario_carrera.configure(background=Estilos.BACKGROUND1)
+
+        titulo = tk.Label(ventana_usuario_carrera, text = '''-----------------------------------------------------------------
+        Matrícula de Carreras
+        -----------------------------------------------------------------''', **Estilos.STYLE
+        ).pack(side=TOP)
+
+        instruccion1 = tk.Label(ventana_usuario_carrera, text = "Seleccione la carrera que desea matricular:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+        opciones = tk.StringVar()
+        opciones1 = ttk.Combobox(ventana_usuario_carrera, textvariable=opciones)
+        opciones1['values'] = ['Ingenieria en Electronica', 'Ingenieria en Produccion Industrial', 'Ingenieria en Computacion']
+        opciones1['state'] = 'readonly'
+        opciones1.place(x = 390, y = 140, width= 200, height=23)
+
+        boton_regresar = tk.Button(ventana_usuario_carrera, text = "Regresar a la pantalla inicial", command=lambda:[estudiante(), esconder(ventana_usuario_carrera)],**Estilos.BOTONES).place(x =20, y = 260)
+        boton_ingresar = tk.Button(ventana_usuario_carrera, text = "Seleccionar", **Estilos.BOTONES).place(x =595, y = 138)
+        '''messagebox.showinfo(message= '¡Carrera matriculada con éxito!', title = 'Alerta')'''
+    elif sv_opciones_estudiantes.get() == "Darse de baja de una carrera":
+        desvincular_carrera()
+    elif sv_opciones_estudiantes.get() == "Matricular cursos": 
+        estudiante_cursos()
+    elif sv_opciones_estudiantes.get() == 'Desvincular cursos': 
+        desvincular_cursos()
+    elif sv_opciones_estudiantes.get() == 'Agregar actividades':
+        agregar_actividades()
+    elif sv_opciones_estudiantes.get() == 'Ver actividades':
+        ver_actividades()
+    elif sv_opciones_estudiantes.get() == 'Generar reporte':
+        generar_reporte()
+        
+## Desvincular carrera
+def desvincular_carrera():
+        ...
+
+## Matricular cursos
+def estudiante_cursos():
+    ventana_usuario_cursos= Toplevel(ventana_inicial)
+    ventana_usuario_cursos.title('Sistema de Administración del Tiempo')
+    ventana_usuario_cursos.minsize(700,300)
+    ventana_usuario_cursos.resizable(False, False)
+    ventana_usuario_cursos.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_usuario_cursos, text = '''-----------------------------------------------------------------
+    Matrícula de Cursos
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    instruccion1 = tk.Label(ventana_usuario_cursos, text = "Seleccione los cursos que desea matricular:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+    vincular1 = tk.Checkbutton(ventana_usuario_cursos, text= 'Hola', width = 30).place(x = 405, y = 137)
+
+    boton_regresar = tk.Button(ventana_usuario_cursos, text = "Regresar a la pantalla inicial", command=lambda:[estudiante(), esconder(ventana_usuario_cursos)], **Estilos.BOTONES).place(x =20, y = 260)
+    boton_ingresar = tk.Button(ventana_usuario_cursos, text = "Guardar", **Estilos.BOTONES).place(x =620, y = 260)
+    '''messagebox.showinfo(message= 'Cursos matriculados con éxito!', title = 'Alerta')'''
+
+## Desvincular cursos
+def desvincular_cursos():
+    ventana_usuario_desvincular= Toplevel(ventana_inicial)
+    ventana_usuario_desvincular.title('Sistema de Administración del Tiempo')
+    ventana_usuario_desvincular.minsize(700,300)
+    ventana_usuario_desvincular.resizable(False, False)
+    ventana_usuario_desvincular.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_usuario_desvincular, text = '''-----------------------------------------------------------------
+    Desvinculación de Cursos
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    instruccion1 = tk.Label(ventana_usuario_desvincular, text = "Seleccione los cursos:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+    vincular1 = tk.Checkbutton(ventana_usuario_desvincular, text= 'Hola', width = 30).place(x = 225, y = 137)
+
+    boton_regresar = tk.Button(ventana_usuario_desvincular, text = "Regresar a la pantalla inicial", command=lambda:[estudiante(), esconder(ventana_usuario_desvincular)], **Estilos.BOTONES).place(x =20, y = 260)
+    boton_ingresar = tk.Button(ventana_usuario_desvincular, text = "Guardar", **Estilos.BOTONES).place(x =620, y = 260)
+    '''messagebox.showinfo(message= 'Cambios realizados con éxito!', title = 'Alerta')'''
+
+## Agregar actividades
+def agregar_actividades():
+    ventana_actividades = Toplevel(ventana_inicial)
+    ventana_actividades.title('Sistema de Administración del Tiempo')
+    ventana_actividades.minsize(700,500)
+    ventana_actividades.resizable(False, False)
+    ventana_actividades.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_actividades, text = '''-----------------------------------------------------------------
+    Adición de Actividades
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    nombre = tk.Label(ventana_actividades, text = "Nombre:" , **Estilos.LABELS).place(x = 20, y = 135)  
+    desripcion = tk.Label(ventana_actividades, text='Descripción:', **Estilos.LABELS).place(x = 20, y = 175) 
+    cursos = tk.Label(ventana_actividades, text='Curso al que se asocia esta actividad:', **Estilos.LABELS).place(x = 20, y = 215) 
+    fecha_inicio = tk.Label(ventana_actividades, text='Fecha de inicio:', **Estilos.LABELS).place(x = 20, y = 255) 
+    fecha_final = tk.Label(ventana_actividades, text='Fecha de finalización:', **Estilos.LABELS).place(x = 20, y = 295) 
+    dia = tk.Label(ventana_actividades, text='Día:', **Estilos.LABELS).place(x = 20, y = 335) 
+    horas = tk.Label(ventana_actividades, text='Horas de dedicación:', **Estilos.LABELS).place(x = 20, y = 375) 
+
+    nombre1 = tk.Entry(ventana_actividades, width = 30).place(x = 100, y = 140)
+    descripcion1 = tk.Entry(ventana_actividades, width = 30).place(x = 133, y = 180)
+    fecha_inicio1 = DateEntry(ventana_actividades, selectmode='day').place(x = 160, y = 260)
+    fecha_final1 = DateEntry(ventana_actividades, selectmode='day').place(x = 210, y = 300)
+    horas1 = tk.Entry(ventana_actividades, width = 30).place(x = 210, y = 380)
+
+    dias1 = tk.StringVar()
+    dias1_1 = ttk.Combobox(ventana_actividades, textvariable=dias1)
+    dias1_1['values'] = ['Lunes', 'Martes', 'Miércoles','Jueves', 'Viernes', 'Sábado', 'Domingo']
+    dias1_1['state'] = 'readonly'
+    dias1_1.place(x = 63, y = 338, width= 200, height=23)
+
+    cursos1 = tk.StringVar()
+    cursos1_1 = ttk.Combobox(ventana_actividades, textvariable=cursos1)
+    cursos1_1['values'] = ['Matematica', 'Ingles', 'Sin curso asociado']
+    cursos1_1['state'] = 'readonly'
+    cursos1_1.place(x = 347, y = 217, width= 200, height=23)
+
+    boton_regresar = tk.Button(ventana_actividades, text = "Regresar a la pantalla inicial", command=lambda:[estudiante(), esconder(ventana_actividades)], **Estilos.BOTONES).place(x =20, y = 450)
+    boton_ingresar = tk.Button(ventana_actividades, text = "Guardar", **Estilos.BOTONES).place(x =600, y = 450)
+
+    '''messagebox.showinfo(message='¡Actividad agregada con éxito!', title='Alerta')
+    messagebox.askyesno(message="¿Está seguro que desea regresar a la pantalla anterior? \n\nTodo los datos digitados se perderán.", title="Alerta")
+    messagebox.showinfo(message='¡¡¡Usted ya ha sobrepasado el límite de horas diarios/semanales !!!', title='Alerta')
+    '''
+
+## Ver actividades
+def ver_actividades():
+    ...
+
+## Generar reporte
+def generar_reporte():
+    global sv_reportes
+    ventana_reportes = Toplevel(ventana_inicial)
+    ventana_reportes.title('Sistema de Administración del Tiempo')
+    ventana_reportes.minsize(600,300)
+    ventana_reportes.resizable(False, False)
+    ventana_reportes.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_reportes, text = '''-----------------------------------------------------------------
+    Generación de Reportes
+    -----------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    opcion = tk.Label(ventana_reportes, text = "Tipo de reporte:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+    sv_reportes = tk.StringVar()
+    reportes1 = ttk.Combobox(ventana_reportes, textvariable=sv_reportes)
+    reportes1['values'] = ['Reporte de actividades', 'Reporte de porcentaje de actividades ejecutadas', 'Reporte de tiempo disponible']
+    reportes1['state'] = 'readonly'
+    reportes1.place(x = 163, y = 137, width= 265, height=23)
+
+    boton_regresar = tk.Button(ventana_reportes, text = "Regresar a la pantalla inicial", command=lambda:[estudiante(), esconder(ventana_reportes)], **Estilos.BOTONES).place(x =20, y = 255)
+    boton_ingresar = tk.Button(ventana_reportes, text = "Seleccionar", command=lambda:[reporte_actividades(), esconder(ventana_reportes)], **Estilos.BOTONES).place(x =500, y = 255)
+
+## Reporte actividades
+def reporte_actividades():
+    if sv_reportes.get() == 'Reporte de actividades':
+        ventana_reportes_actividades = Toplevel(ventana_inicial)
+        ventana_reportes_actividades.title('Sistema de Administración del Tiempo')
+        ventana_reportes_actividades.minsize(800,600)
+        ventana_reportes_actividades.resizable(False, False)
+        ventana_reportes_actividades.configure(background=Estilos.BACKGROUND1)
+
+        titulo = tk.Label(ventana_reportes_actividades, text = '''-----------------------------------------------------------------
+        Reporte de Actividades
+        -----------------------------------------------------------------''', **Estilos.STYLE
+        ).pack(side=TOP)
+
+        opcion = tk.Label(ventana_reportes_actividades, text = "Seleccione el día:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+        dias = tk.StringVar()
+        dias1 = ttk.Combobox(ventana_reportes_actividades, textvariable=dias)
+        dias1['values'] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+        dias1['state'] = 'readonly'
+        dias1.place(x = 180, y = 137, width= 150, height=23)
+
+        boton_regresar = tk.Button(ventana_reportes_actividades, text = "Regresar a la pantalla inicial", command=lambda:[generar_reporte(), esconder(ventana_reportes_actividades)], **Estilos.BOTONES).place(x =20, y = 555)
+        boton_ingresar = tk.Button(ventana_reportes_actividades, text = "Seleccionar", **Estilos.BOTONES).place(x =700, y = 555)
+    elif sv_reportes.get() == 'Reporte de porcentaje de actividades ejecutadas':
+        reporte_porcentaje()
+    elif sv_reportes.get() == 'Reporte de tiempo disponible':
+        reporte_tiempo()
+
+## Reporte de porcentaje de actividades
+def reporte_porcentaje():
+    ventana_reportes_porcentaje = Toplevel(ventana_inicial)
+    ventana_reportes_porcentaje.title('Sistema de Administración del Tiempo')
+    ventana_reportes_porcentaje.minsize(600,400)
+    ventana_reportes_porcentaje.resizable(False, False)
+    ventana_reportes_porcentaje.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_reportes_porcentaje, text = '''------------------------------------------------------------------------
+    Reporte de Porcentaje de Actividades Ejecutadas
+    ------------------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    opcion = tk.Label(ventana_reportes_porcentaje, text = "Seleccione el día:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+    dias = tk.StringVar()
+    dias1 = ttk.Combobox(ventana_reportes_porcentaje, textvariable=dias)
+    dias1['values'] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    dias1['state'] = 'readonly'
+    dias1.place(x = 180, y = 137, width= 150, height=23)
+
+    boton_regresar = tk.Button(ventana_reportes_porcentaje, text = "Regresar a la pantalla inicial", command=lambda:[generar_reporte(), esconder(ventana_reportes_porcentaje)], **Estilos.BOTONES).place(x =20, y = 355)
+    boton_ingresar = tk.Button(ventana_reportes_porcentaje, text = "Seleccionar", **Estilos.BOTONES).place(x =500, y = 355)
+
+## Reporte de tiempo restante
+def reporte_tiempo():
+    ventana_reportes_tiempo = Toplevel(ventana_inicial)
+    ventana_reportes_tiempo.title('Sistema de Administración del Tiempo')
+    ventana_reportes_tiempo.minsize(600,400)
+    ventana_reportes_tiempo.resizable(False, False)
+    ventana_reportes_tiempo.configure(background=Estilos.BACKGROUND1)
+
+    titulo = tk.Label(ventana_reportes_tiempo, text = '''------------------------------------------------------------------------
+    Reporte de Tiempo Disponible
+    ------------------------------------------------------------------------''', **Estilos.STYLE
+    ).pack(side=TOP)
+
+    opcion = tk.Label(ventana_reportes_tiempo, text = "Seleccione el día:" , **Estilos.LABELS).place(x = 20, y = 135)  
+
+    dias = tk.StringVar()
+    dias1 = ttk.Combobox(ventana_reportes_tiempo, textvariable=dias)
+    dias1['values'] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    dias1['state'] = 'readonly'
+    dias1.place(x = 180, y = 137, width= 150, height=23)
+
+    boton_regresar = tk.Button(ventana_reportes_tiempo, text = "Regresar a la pantalla inicial", command=lambda:[generar_reporte(), esconder(ventana_reportes_tiempo)], **Estilos.BOTONES).place(x =20, y = 355)
+    boton_ingresar = tk.Button(ventana_reportes_tiempo, text = "Seleccionar", **Estilos.BOTONES).place(x =500, y = 355)
+
+## Esconder ventanas
+def esconder(v):
+    v.withdraw()
+
+## Mostrar ventanas
+def mostrar(v):
+    v.deiconify()
+
+ventana_inicial = tk.Tk()
+ventana_inicial.minsize(700,250)
+ventana_inicial.resizable(False, False)
+ventana_inicial.configure(background=Estilos.BACKGROUND1)
+ventana_inicial.title('Sistema de Administración del Tiempo')
+
+lb_principal = tk.Label(ventana_inicial, text = '''-------------------------------------------------------------------------------------
+Bienvenido al Sistema de Administración del Tiempo del TEC
+-------------------------------------------------------------------------------------''', **Estilos.STYLE).pack(side=TOP)
+
+lb_instruccion = tk.Label(ventana_inicial, text='Seleccione su tipo de usuario:', **Estilos.LABELS).place(x = 20, y = 125)
+
+sv_usuarios = tk.StringVar()
+comobo_usuarios1 = ttk.Combobox(ventana_inicial, textvariable=sv_usuarios)
+comobo_usuarios1['values'] = ["Administrador","Estudiante"]
+comobo_usuarios1['state'] = 'readonly'
+comobo_usuarios1.place(x = 285, y = 130, width= 200, height=23)
+
+boton_principal = tk.Button(ventana_inicial, 
+                            text='Seleccionar', 
+                            command=lambda:[usuarios_admin(),esconder(ventana_inicial)], 
+                            **Estilos.BOTONES
+                            ).place(x = 495, y = 128)
+
+ventana_inicial.mainloop()
